@@ -1,47 +1,105 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+{{-- resources/views/auth/login.blade.php --}}
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+    <title>{{ config('app.name', 'Login') }}</title>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+    <!-- Fonts & Styles -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="{{ asset('media/assets/fontawesome-free/css/all.min.css') }}">
+    <link href="{{ asset('media/assets/icheck-bootstrap/icheck-bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('media/assets/css/adminlte.min.css') }}">
+</head>
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="{{ route('home') }}" class="h1"><b>M.F.A </b> Login </a>
+    </div>
+    <div class="card-body">
+      
+      {{-- Flash Messages --}}
+      @if(session('error'))
+          <div id="errorMessage" class="alert alert-danger">{{ session('error') }}</div>
+          <script>
+              setTimeout(() => document.getElementById('errorMessage').style.display = 'none', 10000);
+          </script>
+      @endif
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+      @if(session('success'))
+          <div id="successMessage" class="alert alert-success">{{ session('success') }}</div>
+          <script>
+              setTimeout(() => document.getElementById('successMessage').style.display = 'none', 10000);
+          </script>
+      @endif
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+      <p class="login-box-msg">Sign in to start your session</p>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+      {{-- Laravel Breeze default login route --}}
+      <form method="POST" action="{{ route('login') }}">
+          @csrf
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+          <div class="input-group mb-3">
+              <input type="email" placeholder="Email"
+                     class="form-control @error('email') is-invalid @enderror"
+                     name="email" value="{{ old('email') }}" required autofocus>
+              <div class="input-group-append">
+                  <div class="input-group-text"><span class="fas fa-user"></span></div>
+              </div>
+              @error('email')
+                  <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+              @enderror
+          </div>
+
+          <div class="input-group mb-3">
+              <input type="password" placeholder="Password"
+                     class="form-control @error('password') is-invalid @enderror"
+                     name="password" required>
+              <div class="input-group-append">
+                  <div class="input-group-text"><span class="fas fa-lock"></span></div>
+              </div>
+              @error('password')
+                  <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
+              @enderror
+          </div>
+
+          <div class="form-group mb-3">
+              <div class="icheck-primary">
+                  <input type="checkbox" id="remember" name="remember">
+                  <label for="remember">Remember Me</label>
+              </div>
+          </div>
+
+          <div class="row">
+              <div class="col-12">
+                  <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              </div>
+          </div>
+      </form>
+
+      <p class="mb-1 mt-3">
+          @if (Route::has('password.request'))
+              <a href="{{ route('password.request') }}">Forgot your password?</a>
+          @endif
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script src="{{ asset('media/assets/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('media/assets/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('media/assets/js/adminlte.min.js') }}"></script>
+
+</body>
+</html>

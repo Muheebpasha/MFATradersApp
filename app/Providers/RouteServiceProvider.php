@@ -29,12 +29,18 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         $this->routes(function () {
+            // ✅ Backend (Admin) routes
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
+
+            // ✅ API routes
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            // ✅ Frontend routes
             Route::middleware('web')
-                ->group(base_path('routes/web.php'));
+                ->group(base_path('routes/frontendWeb.php'));
         });
     }
 }
