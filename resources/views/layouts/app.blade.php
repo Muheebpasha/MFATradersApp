@@ -32,6 +32,17 @@
         #pagination-controls button { margin: 0 5px; }
         #current-page, #total-pages, #total-items { margin: 0 5px; }
         .error-message { color: red; font-size: 0.9rem; white-space: nowrap; }
+            #div_suggestions {
+                position: absolute; 
+                z-index: 99; 
+                background-color : #fff;
+                padding :5px;
+                border: 1px solid;
+                cursor : pointer;
+                max-height: 150px; 
+                overflow-y: auto; 
+                width: 90%;
+            }
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -91,9 +102,9 @@
     @include('layouts.app-sidebar')
 
     <!-- Main Content -->
-    <div class="content-wrapper">
+    
         @yield('content')
-    </div>
+    
 
     <!-- Footer -->
     <footer class="main-footer">

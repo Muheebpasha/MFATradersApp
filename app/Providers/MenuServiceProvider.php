@@ -4,33 +4,70 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Menu;
+use App\Models\AdminUserPermission;
 
 class MenuServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    public function boot()
     {
-        // ✅ Skip DB logic when running artisan commands
-        if ($this->app->runningInConsole()) {
-            return;
-        }
+        View::composer('*', function ($view) {
+            $menuItems = [];
 
-        view()->composer('*', function ($view) {
-            $menus = Menu::whereNull('parent_id')
-                ->orderBy('module_name','ASC')
-                ->get();
+            if (Auth::check()) {
+                $adminUserId  = Auth::user()->id;     
+                $adminEmailId = Auth::user()->email;  
 
-            $view->with('menus', $menus);
+                // Get user permissions
+                $userPermissions = AdminUserPermission::where(function ($query) use ($adminUserId, $adminEmailId) {
+                    $query->where('admin_user_id', $adminUserId)
+                          ->orWhere('admin_email', $adminEmailId);
+                })->first();
+
+                if ($userPermissions) {
+                    $allowedModules = array_map('trim', explode(',', $userPermissions->module_list));
+
+                    // Fetch only parent menus that are allowed
+                    $parentModules = Menu::where('is_parent', 1)
+                        ->whereIn('module_name', $allowedModules)
+                        ->orderByRaw("CASE WHEN module_name = 'Dashboard' THEN 0 ELSE 1 END")
+                        ->orderBy('module_name', 'ASC')
+                        ->get();
+
+                    foreach ($parentModules as $parent) {
+                        $menuItem = [
+                            'label'    => $parent->module_name,
+                            'route'    => url($parent->url_string),
+                            'icon'     => $parent->icon,
+                            'active'   => Route::is($parent->route_name), 
+                            'submenus' => []
+                        ];
+
+                        // Fetch children that are also allowed
+                        $children = Menu::where('parent_id', $parent->id)
+                                        ->whereIn('module_name', $allowedModules)
+                                        ->get();
+
+                        foreach ($children as $child) {
+                            $menuItem['submenus'][] = [
+                                'label'  => $child->module_name,
+                                'route'  => url($child->url_string),
+                                'active' => Route::is($child->route_name),
+                            ];
+                        }
+
+                        $menuItems[] = $menuItem;
+                    }
+                }
+            }
+
+            $view->with('menuItems', $menuItems);
         });
     }
 
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function register()
     {
         //
     }

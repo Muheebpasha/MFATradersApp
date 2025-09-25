@@ -1,19 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<style>
-    #div_suggestions {
-        position: absolute; 
-        z-index: 99; 
-        background-color : #fff;
-        padding :5px;
-        border: 1px solid;
-        cursor : pointer;
-        max-height: 150px; 
-        overflow-y: auto; 
-        width: 90%;
-    }
-</style>
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
@@ -22,7 +9,7 @@
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="{{ custom_route('/home') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ url('/home') }}">Home</a></li>
               <li class="breadcrumb-item active">Admin Users Lists</li>
             </ol>
           </div>
@@ -72,7 +59,7 @@
             <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Admin Users Lists</h3>
-                <a href="{{ custom_route('/adminusers/create') }}" class="float-right btn btn-primary">Add Admin User</a>
+                <a href="{{ url('/adminusers/create') }}" class="float-right btn btn-primary">Add Admin User</a>
               </div>
               <div class="card-body p-0">
                 <table class="table table-striped">
@@ -101,12 +88,12 @@
                       <td>{{ $user->company }}</td>
                       <td>{{ $user->nationality }}</td>
                       <td>
-                      <a href="{{ custom_route('/adminusers/change-password/') }}{{ $user->id }}" class="btn btn-warning btn-sm"> <i
+                      <a href="{{ url('/adminusers/change-password/') }}{{ $user->id }}" class="btn btn-warning btn-sm"> <i
                               class="fa fa-key"></i></a> 
                       <a href="javascript:void(0);" class="btn btn-sm {{ $user->status == '1' ? 'btn-success' : 'btn-danger' }} status-toggle" data-user-id="{{ $user->id }}">
                           <i class="fas fa-dot-circle"></i>
                       </a>
-                      <a href="{{ custom_route('/adminusers/edit/') }}{{ $user->id }}" class="btn btn-primary btn-sm"> <i
+                      <a href="{{ url('/adminusers/edit/') }}{{ $user->id }}" class="btn btn-primary btn-sm"> <i
                               class="far fa-edit"></i></a> 
                       <a href="javascript:void(0);" class="btn btn-danger btn-sm  delete-user" data-user-id="{{ $user->id }}"> <i
                             class="far fa-trash-alt"></i></a>
@@ -125,19 +112,19 @@
       </div>
     </section>
     <!-- /.content -->
-    <a href="{{ custom_route('/adminusers/create') }}" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
+    <a href="{{ url('/adminusers/create') }}" class="btn btn-primary back-to-top" role="button" aria-label="Scroll to top">
     <i class="fa fa-plus my-float"></i>
   </a>
   </div>
     
-    <script src="{{ custom_route('js/toggleContent.js') }}"></script>
+    <script src="{{ url('js/toggleContent.js') }}"></script>
 
   <script>
   $(document).ready(function() {
       var csrfToken = $('meta[name="csrf-token"]').attr('content');
       $('.status-toggle').click(function() {
           var userId = $(this).data('user-id');
-          var url = "{{ custom_route('/adminusers/updateStatus') }}/" + userId;
+          var url = "{{ url('/adminusers/updateStatus') }}/" + userId;
           
           $.ajax({
               type: 'PUT',
@@ -168,7 +155,7 @@
     function deleteUser(userId) {
         $.ajax({
             type: 'DELETE',
-            url: "{{ custom_route('/adminusers', ['id' => '']) }}/" + userId,
+            url: "{{ url('/adminusers', ['id' => '']) }}/" + userId,
             headers: {
                 'X-CSRF-TOKEN': csrfToken
             },
@@ -197,7 +184,7 @@ $("#div_suggestions").on("click", ".autocomplete-item", function() {
 
     // The search function
     function getSearchResult(txt) { 
-        var route = "{{ custom_route('/adminusers/autosuggest') }}?txt=" + encodeURIComponent(txt);
+        var route = "{{ url('/adminusers/autosuggest') }}?txt=" + encodeURIComponent(txt);
         $('#div_suggestions').css('display', 'block').html('loading...');
         
         $.ajax({

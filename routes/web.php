@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\SliderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::delete('/delete-module/{id}',[AdminUserController::class,'deleteModule']);
     });
    
+    Route::resource('sliders', SliderController::class);
 
 });
 

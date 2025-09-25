@@ -4,63 +4,86 @@
 
 @include('partials.breadcrumb')
 
+<style>
+/* Keep the sidebar vertical tab style clean */
+.nav-tabs.nav-stacked > li > a {
+    border-radius: 10;
+    border: none;
+    padding: 14px 20px;
+    background: #f8f8f8;
+    margin-bottom: 8px;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: 600;
+}
 
-        <!-- start service-singel-section -->
-        <section class="service-singel-section section-padding">
-            <div class="container">
-                <div class="row">
-                    <div class="col col-md-8 col-md-push-4">
-                        <div class="service-single-content">
-                            <div>
-                                <img src="{{ asset('media/frontend/images/service-single-info.jpg') }}" alt>
-                            </div>
-                            <div class="title">
-                                <h3>Automative parts &amp; system</h3>
-                                <div class="download">
-                                    <a href="#"><i class="fa fa-file-word-o"></i> Download Doc</a>
-                                    <a href="#"><i class="fa fa-file-pdf-o"></i> Download PDF</a>
-                                </div>
-                            </div>
-                            <div class="details">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!</p>
-                                <ul>
-                                    <li><i class="fa fa-plus"></i> Mollis Pharetra Euismod Tellus Fermentum</li>
-                                    <li><i class="fa fa-plus"></i> Vulputate sem Pellentesque Adipiscing</li>
-                                    <li><i class="fa fa-plus"></i> Cursus sit Tortor Ligula Nullam</li>
-                                </ul>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!</p>
-                                <h4>Sem Aenean Pharetra</h4>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi iste accusamus voluptates, aliquid blanditiis ut. Provident vitae ullam quibusdam quae libero dolores, ratione vel cupiditate sunt amet? Sit, incidunt, laboriosam!</p>
-                                <a href="#" class="theme-btn">Contact us</a>
-                            </div>
-                        </div> <!-- end service content -->
-                    </div> <!-- end col -->
-                    
-                    <div class="col col-md-4 col-md-pull-8">
-                        <div class="service-single-sidebar">
-                            <div class="services-link-widget widget">
-                                <ul>
-                                    <li class="current"><a href="#">Power and energy</a></li>
-                                    <li><a href="#">Oil and lubricant</a></li>
-                                    <li><a href="#">Meterial engineering</a></li>
-                                    <li><a href="#">Mechanical engineering</a></li>
-                                    <li><a href="#">Chemical research</a></li>
-                                    <li><a href="#">Alternate energy</a></li>
-                                    <li><a href="#">Agricultural processing</a></li>
-                                </ul>
-                            </div>
-                            <div class="download-brocher-widget widget">
-                                <a href="#"><i class="fa fa-file-pdf-o"></i> Download brochure</a>
-                            </div>
-                            <div class="widget contact-widget">
-                                <h3>Contact us for help?</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste assumenda unde, ut.Iste assumenda unde, ut.</p>
-                            </div>
-                        </div>
+.nav-tabs.nav-stacked > li.active > a,
+.nav-tabs.nav-stacked > li > a:hover {
+    background-color: #fdc900;
+    color: #fff;
+}
+</style>
+
+<section class="service-singel-section section-padding">
+    <div class="container">
+        <div class="row">
+            
+            <!-- Sidebar (Vertical Nav Tabs) -->
+            <div class="col-md-4 service-single-sidebar">
+                <ul class="services-link-widget widget nav nav-tabs nav-stacked" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#garments" aria-controls="garments" role="tab" data-toggle="tab">
+                            Garments Accessories and Trims Supply
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#surplus" aria-controls="surplus" role="tab" data-toggle="tab">
+                            Surplus and Scrap Purchase
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#manpower" aria-controls="manpower" role="tab" data-toggle="tab">
+                            Temporary Man Power Supply
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#legal" aria-controls="legal" role="tab" data-toggle="tab">
+                            Legal Business Consultant
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <!-- Main Tab Content -->
+            <div class="col-md-8">
+                <div class="tab-content">
+
+                    <!-- Garments Accessories Tab -->
+                    <div role="tabpanel" class="tab-pane fade in active" id="garments">
+                         @include('userModule.services.includes.garments')
                     </div>
-                </div> <!-- end row -->
-            </div> <!-- end container -->
-        </section>
-        <!-- end service-single-section -->
+
+                    <!-- Surplus and Scrap Tab -->
+                    <div role="tabpanel" class="tab-pane fade" id="surplus">
+                        @include('userModule.services.includes.surplus')
+                    </div>
+
+                    <!-- Manpower Tab -->
+                    <div role="tabpanel" class="tab-pane fade" id="manpower">
+                        @include('userModule.services.includes.manpower')
+                    </div>
+
+                    <!-- Legal Consultant Tab -->
+                    <div role="tabpanel" class="tab-pane fade" id="legal">
+                        @include('userModule.services.includes.legal')
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
 
 @endsection
